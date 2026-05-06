@@ -1,438 +1,734 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html lang="fr">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <link href="Styles/custom/jquery-ui-1.9.2.custom.css" rel="stylesheet" />
-    <link href="Styles/Fabian Terf.css" rel="stylesheet" />
-    <script src="Scripts/jquery-1.8.3.js" type="text/javascript"></script>
-    <script src="Scripts/jquery-ui-1.9.2.custom.js" type="text/javascript"></script>
-    <script type="text/javascript">
-        // Fonction d'initialisation.
-        $(function () {
-            $("#button").button();
-            $('[id$=btnDownloadPDF]').button();
-            $('[id$=btnContact]').button();
-            $("#tabs").tabs();
-        });
-    </script>
-    <title>Fabian Terf</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fabian Terf – CV</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #e8e4de;
+    --white: #f8f6f2;
+    --accent: #1e4870;
+    --accent-light: #dce8f2;
+    --accent2: #2e6898;
+    --text: #1e1e1e;
+    --muted: #5a6272;
+    --border: #ccc6bc;
+    --tag-bg: #e4edf5;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Source Sans 3', sans-serif;
+    font-weight: 300;
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .page {
+    max-width: 980px;
+    margin: 40px auto;
+    padding: 0 20px 60px;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--white);
+    border-radius: 4px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    padding: 44px 52px;
+    margin-bottom: 24px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 40px;
+    align-items: center;
+    border-top: 5px solid var(--accent);
+  }
+
+  .avatar {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    background: var(--accent-light);
+    border: 3px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem;
+    color: var(--accent);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .header-text h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.5px;
+    margin-bottom: 6px;
+  }
+
+  .header-text h1 span { color: var(--accent); }
+
+  .subtitle {
+    font-size: 0.93rem;
+    color: var(--muted);
+    margin-bottom: 16px;
+    font-style: italic;
+    line-height: 1.5;
+  }
+
+  .contacts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  .contacts span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .contacts svg { color: var(--accent); flex-shrink: 0; }
+
+  /* ── LAYOUT ── */
+  .columns {
+    display: grid;
+    grid-template-columns: 1fr 295px;
+    gap: 24px;
+    align-items: start;
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: var(--white);
+    border-radius: 4px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    padding: 32px 36px;
+    margin-bottom: 24px;
+  }
+
+  .card:last-child { margin-bottom: 0; }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 22px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* ── ABOUT ── */
+  .about p { color: #333; margin-bottom: 10px; font-size: 0.94rem; }
+  .about p:last-child { margin-bottom: 0; }
+  .about strong { color: var(--accent); font-weight: 600; }
+
+  /* ── TIMELINE ── */
+  .job { display: flex; gap: 18px; margin-bottom: 30px; }
+  .job:last-child { margin-bottom: 0; }
+
+  .job-aside {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 5px;
+    width: 14px;
+    flex-shrink: 0;
+  }
+
+  .dot {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 2px solid var(--accent-light);
+    outline: 2px solid var(--accent);
+    flex-shrink: 0;
+  }
+
+  .dot.current { background: #2a7a4f; outline-color: #2a7a4f; }
+
+  .vline {
+    width: 1px;
+    flex: 1;
+    background: var(--border);
+    margin-top: 5px;
+  }
+
+  .job:last-child .vline { display: none; }
+
+  .job-body { flex: 1; }
+
+  .job-title {
+    font-family: 'Playfair Display', serif;
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--text);
+    margin-bottom: 2px;
+  }
+
+  .job-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  .job-company { font-size: 0.88rem; color: var(--accent2); font-weight: 600; }
+
+  .job-period {
+    font-size: 0.78rem;
+    color: var(--muted);
+    background: var(--tag-bg);
+    padding: 1px 9px;
+    border-radius: 3px;
+    border: 1px solid var(--border);
+  }
+
+  .job-desc { font-size: 0.88rem; color: #444; line-height: 1.65; margin-bottom: 6px; }
+  .job-desc p { margin-bottom: 6px; }
+  .job-desc p:last-child { margin-bottom: 0; }
+
+  .job-desc ul {
+    margin: 6px 0 6px 18px;
+    padding: 0;
+  }
+
+  .job-desc ul li { margin-bottom: 3px; }
+
+  .tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
+
+  .tag {
+    font-size: 0.72rem;
+    background: var(--tag-bg);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    border-radius: 3px;
+    padding: 1px 7px;
+  }
+
+  /* ── SIDE CARDS ── */
+  .skill-group { margin-bottom: 18px; }
+  .skill-group:last-child { margin-bottom: 0; }
+
+  .skill-label {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--muted);
+    font-weight: 600;
+    margin-bottom: 7px;
+  }
+
+  .skill-pills { display: flex; flex-wrap: wrap; gap: 5px; }
+
+  .pill {
+    font-size: 0.78rem;
+    padding: 3px 10px;
+    border-radius: 3px;
+    background: var(--tag-bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+  }
+
+  .pill.main {
+    background: var(--accent-light);
+    border-color: #99bdd8;
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  /* Education */
+  .edu { margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px dashed var(--border); }
+  .edu:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+
+  .edu-degree {
+    font-weight: 600;
+    font-size: 0.88rem;
+    color: var(--text);
+    margin-bottom: 2px;
+  }
+
+  .edu-school { font-size: 0.82rem; color: var(--muted); }
+  .edu-year { font-size: 0.78rem; color: var(--accent); margin-top: 1px; }
+
+  /* Formations diverses */
+  .formation-list {
+    margin: 0 0 0 16px;
+    padding: 0;
+    font-size: 0.82rem;
+    color: #444;
+  }
+  .formation-list li { margin-bottom: 5px; }
+
+  /* Languages */
+  .lang { margin-bottom: 14px; }
+  .lang:last-child { margin-bottom: 0; }
+
+  .lang-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    margin-bottom: 5px;
+  }
+
+  .lang-name { font-weight: 600; color: var(--text); }
+  .lang-note { font-size: 0.75rem; color: var(--muted); font-style: italic; }
+
+  .bar {
+    height: 5px;
+    background: var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 10px;
+    transition: width 1s ease 0.3s;
+  }
+
+  /* Interests */
+  .hobbies { display: flex; flex-wrap: wrap; gap: 7px; }
+
+  .hobby {
+    font-size: 0.8rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 3px 10px;
+    color: var(--muted);
+  }
+
+  /* Footer buttons */
+  .cv-footer {
+    margin-top: 28px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 9px 20px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+
+  .btn:hover { background: var(--accent2); color: #fff; text-decoration: none; }
+
+  .btn.outline {
+    background: transparent;
+    border: 2px solid var(--accent);
+    color: var(--accent);
+  }
+
+  .btn.outline:hover { background: var(--accent); color: #fff; }
+
+  /* Responsive */
+  @media (max-width: 780px) {
+    .columns { grid-template-columns: 1fr; }
+    header { grid-template-columns: 1fr; text-align: center; padding: 30px 24px; }
+    .avatar { margin: 0 auto; }
+    .contacts { justify-content: center; }
+    .card { padding: 24px 20px; }
+  }
+
+  @media print {
+    body { background: white; font-size: 13px; }
+    .page { margin: 0; padding: 0 16px; }
+    .card, header { box-shadow: none; border: 1px solid #ccc; }
+    .cv-footer { display: none; }
+  }
+</style>
 </head>
 <body>
-    <div>
-        <div class="header">
-            <div class="header-image">
-                <img src="Images/Fabian Terf.png" alt="" class="header-image-picture" />
-            </div>
-            <div class="header-qrcodeimage">
-                <img src="Images/QRCode.png" alt="" class="header-qrcodeimage-picture" />
-            </div>
-            <div class="header-content">
-                <p class="textcontent-header">
-                    <font class="header-content-myname">Fabian Terf</font><br />
-                    <b>Bachelier en informatique de gestion - Analyste programmeur .NET C#</b><br />
-                    <b>Détenteur d'un certificat d’aptitudes pédagogiques</b><br />
-                    <b>Guitariste et professeur de guitare</b><br />
-                    <b>Ceinture noire 2ème Dan de Karaté Shotokan-Shinshokaï</b><br />
-                    <br />
-                    Né le 16 septembre 1976 à Verviers<br />
-                    Belge<br />
-                    Marié, quatre enfants
-                </p>
-            </div>
-        </div>
-        <div class="content">
-            <div id="tabs" class="tabs">
-                <ul>
-                    <li><a href="#tabs-0">A propos de moi</a></li>
-                    <li><a href="#tabs-1">Scolarité et formation</a></li>
-                    <li><a href="#tabs-2">Compétences techniques</a></li>
-                    <li><a href="#tabs-3">Expérience professionnelle</a></li>
-                    <li><a href="#tabs-4">Expérience estudiantine</a></li>
-                    <li><a href="#tabs-5">Langues et loisirs</a></li>
-                </ul>
-                <div id="tabs-0" class="textcontent">
-                    <p class="textcontent-header">
-                        <b>En résumé</b><br />
-                    </p>
-                    <p>
-                        Plus de 20 années d'expérience en informatique passées à exercer ce métier dans le secteur public et privé et ce dans
-                        des domaines relativement variés. Je suis plus spécialisé dans le domaine du développement .NET C#.
-                    </p>
-                    <p>
-                        Bonne capacité à rédiger des documents ou autres rapports, et bonne capacité à améliorer la communication des
-                        informations en interne par l'intermédiaire de documentations techniques ou fonctionnelles.
-                    </p>
-                    <p>
-                        Toujours méticuleux et soucieux de perfection, je n’abandonne pas un problème tant que celui-ci n’est pas résolu.
-                        J’accorde également une grande importance à la ponctualité.
-                    </p>
-                    <p>
-                        Je suis toujours désireux d’évoluer vers les technologies nouvelles. Par ailleurs, la gestion de projets et ses
-                        responsabilités sont des choses qui m’attirent. C'est un domaine dans lequel je me sens performant et épanoui.
-                    </p>
-                    <p>
-                        Détenteur d'un certificat d'aptitudes pédagogiques, j'apprécie également enseigner, notamment au travers de cours de guitare particuliers que je donne régulièrement.
-                    </p>
-                    <p class="textcontent-header">
-                        <b>Coordonnées</b><br />
-                    </p>
-                    <p>
-                        Rue des Douze Hommes 45<br />
-                        4141 Banneux (Louveigné)<br />
-                        Belgique<br />
-                        +32 473/89.12.68<br />
-                        <a href="mailto:fabian.terf@gmail.com">fabian.terf@gmail.com</a>
-                    </p>
-                </div>
-                <div id="tabs-1" class="textcontent">
-                    <p class="textcontent-header">
-                        <b>C.A.P. (Certificat d’Aptitudes Pédagogiques) obtenu avec distinction</b><br />
-                        I.E.P.S.C.F. de Verviers-Dison<br />
-                        2010 – 2011
-                    </p>
-                    <p class="textcontent-header">
-                        <b>Graduat en Informatique de Gestion obtenu avec distinction</b><br />
-                        I.E.P.S.C.F. de Soumagne-Chênée<br />
-                        1998 – 2000
-                    </p>
-                    <p class="textcontent-header">
-                        <b>Graduat en kinésithérapie (commencé mais pas terminé)</b><br />
-                        Haute école de la Province de Liège – Barbou<br />
-                        1995 – 1996
-                    </p>
-                    <p class="textcontent-header">
-                        <b>Certificat de l’Enseignement Technique Secondaire Supérieur option Chimie Appliquée</b><br />
-                        Institut Sainte-Claire de Verviers<br />
-                        1992 – 1994
-                    </p>
-                    <p class="textcontent-header">
-                        <b>Certificat de l’Enseignement Général Secondaire Inférieur option Sciences Appliquées</b><br />
-                        Collège saint François-Xavier de Verviers<br />
-                        1990 – 1992
-                    </p>
-                    <p class="textcontent-header">
-                        <b>Formations diverses</b><br />
-                        <ul>
- 		            <li>Formation IBMi - IBMi Access Client Solutions et IBM Rational Developer for i.</i>
-                            <li>Technifutur : Oracle Database - maîtriser les bases (3 jours).</li>
-                            <li>Technifutur : aperçu général de la comptabilité (4 jours). </li>
-                            <li>Technifutur : développement .NET : bases de la programmation .NET.</li>
-                            <li>Formation Delphi pour adaptation d’une application existante (1 semaine).</li>
-                            <li>
-                                Formation de six jours en Java donnée par la société Manex. Programmation orientée
-                                objet en Java + techniques d’accès aux bases de données en Java (JDBC, Hibernate,
-                                JPA).
-                            </li>
-                        </ul>
-                    </p>
-                </div>
-                <div id="tabs-2" class="textcontent">
-                    <ul>
-                        <li>Principalement orienté Microsoft.</li>
-                        <li>Microsoft .NET C# et VB.NET.</li>
-                        <li>Windows Forms, WPF et Silverlight (XAML).</li>
-                        <li>ASP.NET, PHP.</li>
-                        <li>Services WCF, Services RESTFul, ASP.NET Web Api.</li>
-                        <li>JavaScript, HTML5, CSS3, AJAX, Jquery, Boostrap.</li>
-                        <li>Visual Basic 6.0 et VBA.</li>
-                        <li>C et C++ (Visual C++, Borland C++).</li>
-                        <li>Windev.</li>
-                        <li>XML et XSLT.</li>
-                        <li>Microsoft SQL Server, Oracle Database, MySQL, PostgreSQL, SQLite, IBM DB2, Microsoft Access.</li>
-                        <li>Gestion de bases de données : Toad, SQL Plus, SQL Server Management Studio, SQLite Expert, phpMyAdmin.</li>
-                        <li>Serveurs Web : Microsoft IIS, Apache, Tomcat.</li>
-                        <li>Gestionnaire de sources : QSC TeamCoherence et GitHub.</li>
-                        <li>Microsoft Visual Studio 2019 et 2022, Visual Studio Code.</li>
-                        <li>Logiciels de traitement d'images et de dessin vectoriel comme Adobe Photoshop et Adobe Illustrator.</li>
-                        <li>Logiciels destinés à la gestion commerciale et à la comptabilité (Mercator, BOB).</li>
-                        <li>Suite Microsoft Office et OpenOffice.</li>
-                        <li>Divers : Filddler2, SoapUI, Araxis Merge, ...</li>
-                    </ul>
-                    <p>
-                        Sur le plan personnel, j'ai développé une application Web destinée à gérer les budgets familiaux.
-                        Initialement, cette application a été développée avec le plugin Silverlight avec lequel j'ai pu approfondir mes connaissances du langage XAML également utilisé avec WPF.
-                        Depuis la fin du support de Silverlight, l'application a été redéveloppée en ASP.NET.
-                        Elle se connecte à une API RESTful qui interroge une base de données SQLite.
-                    </p>
-                    <p>
-                        J'ai également développé une application permettant de gérer nos photos et nos vidéos familiales. 
-                        Les différents médias peuvent être consultés, modifiés, et archivés. 
-                        L'archivage des médias est réalisé au travers d'une communication TCP-IP établie avec un second applicatif qui pourrait être placé sur un serveur dédié. 
-                        Ces deux applicatifs sont entièrement développés en C# WPF ; technologie pour laquelle j'ai pu approfondir mes connaissances par le biais de ce développement.
-                    </p>
-                </div>
-                <div id="tabs-3" class="textcontent">
-                    <p class="textcontent-header">
-                        <b>Analyste informaticien</b><br />
-                        C.H.R. de Verviers<br />
-                        2022 à ce jour
-                    </p>
-                    <p>
-                        Gestion de projets, de plannings et d'objectifs, participation au support technique, nombreux contacts avec les
-                        utilisateurs finaux.
-                    </p>
-                    <p>
-                        Mise en place d'une solution informatique dans le cadre du dépistage de la surdité chez le nouveau-né.
-                        Accompagnement des utilisateurs, formation de ceux-ci.
-                    </p>
-                    <p>
-                        Développement intégral d'une application massive dont le but est la gestion des utilisateurs présents au sein d'un
-                        Active Directory + d'autres environnements (client lourd en C# - WPF).
-                    </p>
-                    <p>
-                        Développement intégral d'un portail intranet dédié aux déclarations de naissance électroniques (ASP.NET, Ajax,
-                        JQuery, C#, services WCF).
-                    </p>
-                    <p>
-                        Développement d'un client lourd en C# - WPF permettant l'activation de la publication de documents médicaux sur le
-                        RSW.
-                    </p>
-                    <p>
-                        Développement intégral d'un portail intranet permettant de présenter le compendium des analyses du laboratoire.
-                        Compétences utilisées : Compétences analytiques, Active Directory, ASP.NET, AJAX, jQuery, jQuery UI, Bootstrap.
-                    </p>
-                    <p>
-                        Développements C# WPF, SQLite, IBM iSeries et IBM AS/400, ASP.NET, ASP.NET Web Api.
-                    </p>
 
-                    <p class="textcontent-header">
-                        <b>Informaticien de gestion - Analyste programmeur</b><br />
-                        C.H.U. de Liège<br />
-                        2013 à 2022
-                    </p>
-                    <p>
-                        Maintenance et déploiement de solutions informatiques au sein de l'institution, majoritairement dans le cadre de
-                        l'implémentation du dossier médical informatisé OmniPro.
-                        Nombreux contacts avec les utilisateurs, notamment au travers du Helpdesk mis en place de façon hebdomadaire
-                        ainsi que par l'intermédiaire d'un rôle de garde informatique assuré de façon mensuelle. Nombreux contacts
-                        également réalisés en unités de soins lors de la mise en oeuvre de différents projets.
-                    </p>
-                    <p>
-                        Plus particulièrement, mise en place du projet d'informatisation du bloc opératoire intégré à OmniPro et pour lequel
-                        j'ai été le développeur chez MIMS s.a., devenue Xperthis puis Zorgi, de 2005 à 2013.
-                    </p>
-                    <p>
-                        En outre, participation aux projets suivants :
-                        <ul>
-                            <li>Implémentation de la prise de rendez-vous en ligne.</li>
-                            <li>
-                                Affichage du dossier médical sur support mobile.
-                            </li>
-                            <li>
-                                Paramétrisation et installation de tableaux des lits dans les unités de soins et de tableaux des urgences.
-                            </li>
-                            <li>
-                                Développement, paramétrisation et installation d'un logiciel de présentation du programme opératoire
-                                affiché sur des écrans présents dans des lieux stratégiques des différents blocs opératoires.
-                            </li>
-                            <li>
-                                Développements de Web services divers proposant à certains fournisseurs ou partenaires de récupérer des
-                                informations.
-                            </li>
-                            <li>
-                                Fusion de deux bases de données du dossier médical informatisé OmniPro en provenance de deux hôpitaux
-                                différents.
-                            </li>
-                            <li>
-                                Intégrations réalisées entre le dossier médical informatisé OmniPro et divers appareils médicaux.
-                            </li>
-                            <li>
-                                Implémentation d'une solution d'authentification SSO – FAS au sein du site Web de l'institution.
-                            </li>
-                            <li>
-                                Développement de solutions Intranet.
-                            </li>
-                            <li>
-                                Développement d'un portail web clinique à destination des médecins et des patients, permettant la prise de
-                                rendez-vous en ligne, la consultation des résultats de laboratoire via une application dédiée et d'autres fonctionnalités.
-                            </li>
-                        </ul>
-                    </p>
+<div class="page">
 
-                    <p class="textcontent-header">
-                        <b>Analyste programmeur et chef de projet</b><br />
-                        MIMS s.a.<br />
-                        2005 à ce jour
-                    </p>
-                    <p>
-                        Développement au sein du produit principal de la société qui est en fait un dossier
-                        médical informatisé destiné aux cabinets médicaux privés et aux hôpitaux.
-                    </p>
-                    <p>
-                        Les développements effectués touchent pratiquement à toutes les possibilités offertes
-                        par Visual Basic 6.0 (applications graphiques à l’aide des API, modules de classes
-                        et Dlls, composants ActiveX et gestion événementielle, création et gestion des services,
-                        etc.). Les développements sont effectués sur une base de données Oracle. Pas mal
-                        de développements seront également effectués dans le cadre de reprises de données
-                        (FileMaker Pro, Access, SQL Server vers Oracle et vice versa).
-                    </p>
-                    <p>
-                        Nombreux contacts avec la clientèle et suivi de certains projets de A à Z. Présentation
-                        des produits développés dans divers colloques et démonstrations commerciales de
-                        ces produits chez certains prospects.
-                    </p>
-                    <p>
-                        Depuis le mois de janvier 2008, développement d’outils d’exportation de certaines
-                        données et de divers Web Services en Java.
-                    </p>
-                    <p>
-                        Depuis le mois de janvier 2011, responsable de développements (chef de projet) au
-                        sein de la cellule Java (EJB, GWT) en partie, ainsi que dans le cadre de projets
-                        réalisés en Visual Basic 6.0 (notamment le module bloc opératoire).
-                    </p>
-                    <p>
-                        Depuis le mois de juin 2011, développement d’une application en C# avec la technologie
-                        WPF permettant de gérer le paramétrage du matériel opératoire mis en place dans
-                        le cadre d’un bloc opératoire.
-                    </p>
-
-                    <p class="textcontent-header">
-                        <b>Analyste programmeur et technicien</b><br />
-                        S.I. Group s.a.<br />
-                        2004 - 2005
-                    </p>
-                    <p>
-                        Distribution de logiciels de gestion commerciale et de comptabilité chez certains
-                        clients (adaptations spécifiques, suivi et gestion des demandes du client, nombreux
-                        rapports avec la clientèle). Participation également au développement de diverses
-                        applications destinées à la reprise de données en Windev 9.0 et en Visual Basic
-                        6.0.
-                    </p>
-
-                    <p class="textcontent-header">
-                        <b>Analyste programmeur</b><br />
-                        Scius-ICT s.a.<br />
-                        2001 – 2004
-                    </p>
-                    <p>
-                        Réalisation partielle du Guide de l’E-business à l’A.W.T (Agence Wallonne des Télécommunications).
-                        Il s’agit d’un guide développé en XML destiné à informer les PME sur la mise en
-                        route de projets E-business.
-                    </p>
-                    <p>
-                        Gestion et développement du site Internet de Scius-ICT. Création d’un chat intranet
-                        permettant aux membres du personnel de Scius-ICT de communiquer à distance. Développement
-                        d’un système permettant aux candidats potentiels d’insérer leur C.V. dans une base
-                        de données et aux sociétés clientes de consulter ceux-ci. Enfin, développement d’un
-                        module d’administration à distance de la base de données qui intervient dans le
-                        site Internet de Scius-ICT. (PHP4, Microsoft SQL Server 7.0 et MySQL).
-                    </p>
-                    <p>
-                        Création d’une application assez massive (2 ans et demi de développement) développée
-                        en Visual Basic 6.0 et destinée à la gestion des plans comptables ainsi qu’au reporting
-                        et à la consolidation d’une ou de plusieurs compagnies. Cette application stocke
-                        toutes les données nécessaires à la gestion de ces plans comptables suivant l’année
-                        et la période spécifiées et peut ensuite générer aisément les rapports de ceux-ci.
-                        L’originalité et la complexité de cette application demeurent dans le fait qu’elle
-                        est destinée à fonctionner sur différents types de base de données (Microsoft SQL
-                        Server 6.5 et 7.0, Oracle, Microsoft Access, MySQL, PostgreSQL). Un module supplémentaire
-                        a d’ailleurs été créé permettant la création de la base de données à distance par
-                        l’intermédiaire de scripts différents selon le type de système utilisé. A la base,
-                        cette application est disponible en trois langues prédéfinies (Anglais, Français,
-                        Néerlandais) et d’autres langages peuvent être ajoutés permettant la traduction
-                        de l’application. Elle permet également la gestion de la quasi-totalité des devises
-                        internationales par l’intermédiaire d’un système de paramétrage et de configuration.
-                        La mise en page des rapports générés par l’application est totalement paramétrable
-                        à partir de l’application (couleurs, disposition des colonnes, polices de caractères,
-                        bordures, etc…).
-                    </p>
-
-                    <p class="textcontent-header">
-                        <b>Analyste programmeur </b>
-                        <br />
-                        Belgacom s.a.<br />
-                        1999 – 2001
-                    </p>
-                    <p>
-                        Développement d’un site Intranet destiné à la gestion des problèmes techniques qui
-                        peuvent survenir sur le réseau local de Belgacom. Les problèmes sont gérés via une
-                        base de données Microsoft SQL Server 6.5 où ils peuvent être modifiés ou clôturés
-                        en passant par un composant ActiveX DLL (programmation du site avec HTML, DHTML,
-                        VBScript, JavaScript et ASP).
-                    </p>
-                    <p>
-                        Développement de deux applications en Visual Basic 6.0 destinées à la gestion des
-                        pannes matérielles et des demandes de matériel bureautique chez Belgacom. Ces applications
-                        permettent de prendre contact directement avec les fournisseurs par mail ou par
-                        fax en envoyant le bon de commande ou de réparation généré par un objet Excel (entièrement
-                        Visual Basic 6.0 et Microsoft SQL Server 6.5 pour les bases de données).
-                    </p>
-                    <p>
-                        Développement de diverses applications en Visual Basic 6.0 destinées à la gestion
-                        du stock de Belgacom (bases de données Microsoft SQL Server 6.5 et 7.0).
-                    </p>
-                    <p>
-                        Participation au développement du site Intranet principal de Belgacom (portail)
-                        avec outil d’administration entièrement automatisé (géré par base de données Microsoft
-                        SQL Server 7.0) permettant de changer les menus, contenu et design du site. Gestion
-                        de la sécurité et étude moyenne de Microsoft I.I.S 4.0 et M.T.S. (HTML, DHTML, VBscript,
-                        JavaScript et ASP). Créateur principal du design de ce site.
-                    </p>
-                    <p>
-                        Développement de divers formulaires Intranet destinés entre autres à la demande
-                        de lignes I.S.D.N. à domicile ou à la réservation de places de parking dans les
-                        tours de Belgacom. (HTML, DHTML, VBscript, JavaScript et ASP).
-                    </p>
-
-                    <p class="textcontent-header">
-                        <b>Employé</b><br />
-                        Quick de Liège-Guillemins et Quick de Verviers<br />
-                        1996 – 1997
-                    </p>
-                </div>
-                <div id="tabs-4" class="textcontent">
-                    <p class="textcontent-header">
-                        <b>Ouvrier de production</b><br />
-                        Plastiflac à Andrimont<br />
-                        Eté 1994 et 1995
-                    </p>
-                    <p class="textcontent-header">
-                        <b>Vendeur de tapis de sols</b><br />
-                        Royal Décor à Verviers<br />
-                        Eté 1993
-                    </p>
-                    <p class="textcontent-header">
-                        <b>Peintre en bâtiment</b><br />
-                        Chez un particulier<br />
-                        Eté 1992
-                    </p>
-                </div>
-                <div id="tabs-5" class="textcontent">
-                    <p class="textcontent-header">
-                        <b>Langues</b><br />
-                    </p>
-                    <p>
-                        Le <b>français</b> est ma langue maternelle.
-                    </p>
-                    <p>
-                        Ma compréhension de l'<b>anglais</b> est assez bonne. Ma capacité à tenir une conversation dans cette langue est moyenne.
-                    </p>
-                    <p>
-                        Ma compréhension du <b>néérlandais</b> est faible. Ma capacité à tenir une conversation dans cette langue est limitée.
-                    </p>
-                    <p class="textcontent-header">
-                        <b>Loisirs</b><br />
-                    </p>
-                    <p>
-                        Depuis 1992, je pratique le Karaté. J'ai notamment été instructeur de karaté au sein d'un club sportif. Par ailleurs, étant
-                        guitariste, je donne régulièrement des cours particuliers de guitare aux débutants et intermédiaires. 
-                        J’apprécie la lecture, les balades en forêt, le cinéma, le VTT, la course à pied, et tout ce qui touche de près ou de loin à l’informatique.
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="footer">
-            <div class="textcontent">
-                <p>
-                    <button id="btnDownloadPDF" style="font-size: 12px" onclick="Javacript:window.location='Downloads/Fabian Terf.pdf'">
-                        Télécharger mon CV au format PDF
-                    </button>
-                    <button id="btnContact" style="font-size: 12px" onclick="Javacript:window.location='mailto:fabian.terf@gmail.com'">
-                        Me contacter par email
-                    </button>
-                </p>
-            </div>
-        </div>
+  <!-- HEADER -->
+  <header>
+    <div class="avatar"><img src="Images/Fabian Terf.png" alt="" class="header-image-picture" /></div>
+    <div class="header-text">
+      <h1>Fabian <span>Terf</span></h1>
+      <div class="subtitle">
+        Bachelier en informatique de gestion · Analyste programmeur .NET C#<br>
+        Détenteur d'un certificat d'aptitudes pédagogiques · Guitariste et professeur de guitare<br>
+        Ceinture noire 2ème Dan de Karaté Shotokan-Shinshokaï
+      </div>
+      <div class="contacts">
+        <span>
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+          Banneux (Louveigné), Belgique
+        </span>
+        <span>
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.41 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.96a16 16 0 0 0 6 6l.94-.94a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          +32 473/89.12.68
+        </span>
+        <span>
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          <a href="mailto:fabian.terf@gmail.com">fabian.terf@gmail.com</a>
+        </span>
+        <span>
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Né le 16 septembre 1976 · Belge · Marié, quatre enfants
+        </span>
+      </div>
     </div>
+  </header>
+
+  <div class="columns">
+
+    <!-- MAIN COLUMN -->
+    <div>
+
+      <!-- À PROPOS -->
+      <div class="card about">
+        <div class="section-title">À propos</div>
+        <p>Plus de <strong>20 ans d'expérience</strong> en informatique dans le secteur public et privé, avec une spécialisation marquée en <strong>.NET C#</strong>.</p>
+        <p>Bonne capacité à rédiger des documents et rapports, et à améliorer la communication interne au travers de documentations techniques ou fonctionnelles.</p>
+        <p>Toujours méticuleux et soucieux de perfection, je n'abandonne pas un problème tant qu'il n'est pas résolu. J'accorde également une grande importance à la ponctualité.</p>
+        <p>Toujours désireux d'évoluer vers les technologies nouvelles. La <strong>gestion de projets</strong> et ses responsabilités sont des choses qui m'attirent — c'est un domaine dans lequel je me sens performant et épanoui.</p>
+        <p>Détenteur du CAP, j'apprécie également enseigner, notamment au travers de <strong>cours de guitare particuliers</strong> que je donne régulièrement.</p>
+      </div>
+
+      <!-- EXPÉRIENCE -->
+      <div class="card">
+        <div class="section-title">Expérience professionnelle</div>
+
+        <div class="job">
+          <div class="job-aside"><div class="dot current"></div><div class="vline"></div></div>
+          <div class="job-body">
+            <div class="job-title">Développeur</div>
+            <div class="job-meta">
+              <span class="job-company">Bureau Greisch</span>
+              <span class="job-period">2021 – aujourd'hui</span>
+            </div>
+            <div class="job-desc">
+              <p>Paramétrisation et développement dans Odoo 18. Modification du code Python et déploiement en production.</p>
+              <p>Développement d'une application WPF/C# (pattern MVVM) permettant à l'utilisateur de dessiner un maillage graphique pour la mise en place d'un projet de rayonnage.</p>
+              <p>Développement d'une application Web ASP.NET/Razor/JavaScript destinée à gérer les autorisations accordées sur les dossiers physiques via l'Active Directory local.</p>
+            </div>
+            <div class="tags">
+              <span class="tag">C# WPF</span><span class="tag">MVVM</span><span class="tag">ASP.NET</span><span class="tag">Razor</span><span class="tag">Odoo 18</span><span class="tag">Python</span><span class="tag">Active Directory</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="job">
+          <div class="job-aside"><div class="dot"></div><div class="vline"></div></div>
+          <div class="job-body">
+            <div class="job-title">Analyste informaticien</div>
+            <div class="job-meta">
+              <span class="job-company">C.H.R. de Verviers</span>
+              <span class="job-period">2022 – 2024</span>
+            </div>
+            <div class="job-desc">
+              <p>Gestion de projets, de plannings et d'objectifs, support technique, nombreux contacts utilisateurs.</p>
+              <p>Mise en place d'une solution de dépistage de la surdité chez le nouveau-né. Développement d'une application massive de gestion des utilisateurs Active Directory (C# WPF), portail intranet pour déclarations de naissance électroniques (ASP.NET, Ajax, jQuery, WCF), compendium d'analyses laboratoire, et publication de documents médicaux sur le RSW.</p>
+            </div>
+            <div class="tags">
+              <span class="tag">C# WPF</span><span class="tag">ASP.NET</span><span class="tag">WCF</span><span class="tag">SQLite</span><span class="tag">IBM iSeries</span><span class="tag">Active Directory</span><span class="tag">jQuery</span><span class="tag">Bootstrap</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="job">
+          <div class="job-aside"><div class="dot"></div><div class="vline"></div></div>
+          <div class="job-body">
+            <div class="job-title">Informaticien de gestion – Analyste programmeur</div>
+            <div class="job-meta">
+              <span class="job-company">C.H.U. de Liège</span>
+              <span class="job-period">2013 – 2022</span>
+            </div>
+            <div class="job-desc">
+              <p>Maintenance et déploiement du dossier médical informatisé OmniPro. Helpdesk hebdomadaire et garde informatique mensuelle. Contacts réguliers en unités de soins.</p>
+              <p>Principaux projets :</p>
+              <ul>
+                <li>Informatisation du bloc opératoire intégré à OmniPro</li>
+                <li>Prise de rendez-vous en ligne et affichage du dossier médical sur mobile</li>
+                <li>Portail web clinique (médecins & patients) — RDV, résultats de labo</li>
+                <li>Intégrations avec appareils médicaux, fusion de bases OmniPro</li>
+                <li>Authentification SSO–FAS, développements Intranet divers</li>
+              </ul>
+            </div>
+            <div class="tags">
+              <span class="tag">OmniPro</span><span class="tag">C#</span><span class="tag">Web Services</span><span class="tag">SSO</span><span class="tag">SQL Server</span><span class="tag">Oracle</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="job">
+          <div class="job-aside"><div class="dot"></div><div class="vline"></div></div>
+          <div class="job-body">
+            <div class="job-title">Analyste programmeur & Chef de projet</div>
+            <div class="job-meta">
+              <span class="job-company">MIMS s.a. (→ Xperthis → Zorgi)</span>
+              <span class="job-period">2005 – 2013</span>
+            </div>
+            <div class="job-desc">
+              <p>Développement au cœur du DMP OmniPro (VB6, Oracle). Dès 2008, développement d'outils Java et Web Services. Dès 2011, responsable de la cellule Java (EJB, GWT) et du module bloc opératoire. Dès juin 2011, développement C# WPF pour le paramétrage du matériel opératoire.</p>
+              <p>Nombreux contacts clients, suivi de projets de A à Z, présentations en colloques et démos commerciales.</p>
+            </div>
+            <div class="tags">
+              <span class="tag">VB6</span><span class="tag">Oracle</span><span class="tag">Java</span><span class="tag">EJB</span><span class="tag">GWT</span><span class="tag">C# WPF</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="job">
+          <div class="job-aside"><div class="dot"></div><div class="vline"></div></div>
+          <div class="job-body">
+            <div class="job-title">Analyste programmeur & Technicien</div>
+            <div class="job-meta">
+              <span class="job-company">S.I. Group s.a.</span>
+              <span class="job-period">2004 – 2005</span>
+            </div>
+            <div class="job-desc">Distribution de logiciels de gestion commerciale et comptabilité (Mercator, BOB). Développement d'outils de reprise de données en Windev 9.0 et VB6.</div>
+            <div class="tags"><span class="tag">Windev</span><span class="tag">VB6</span><span class="tag">Mercator</span><span class="tag">BOB</span></div>
+          </div>
+        </div>
+
+        <div class="job">
+          <div class="job-aside"><div class="dot"></div><div class="vline"></div></div>
+          <div class="job-body">
+            <div class="job-title">Analyste programmeur</div>
+            <div class="job-meta">
+              <span class="job-company">Scius-ICT s.a.</span>
+              <span class="job-period">2001 – 2004</span>
+            </div>
+            <div class="job-desc">
+              <p>Application multilingue de gestion de plans comptables compatible avec 5 SGBD (SQL Server, Oracle, Access, MySQL, PostgreSQL) — 2,5 ans de développement. Disponible en 3 langues, gestion des devises internationales, rapports entièrement paramétrables.</p>
+              <p>Guide E-business à l'AWT (XML). Site corporate Scius-ICT, chat intranet, module d'insertion de CV en ligne.</p>
+            </div>
+            <div class="tags"><span class="tag">VB6</span><span class="tag">PHP</span><span class="tag">SQL Server</span><span class="tag">Oracle</span><span class="tag">MySQL</span><span class="tag">PostgreSQL</span><span class="tag">XML</span></div>
+          </div>
+        </div>
+
+        <div class="job">
+          <div class="job-aside"><div class="dot"></div><div class="vline"></div></div>
+          <div class="job-body">
+            <div class="job-title">Analyste programmeur</div>
+            <div class="job-meta">
+              <span class="job-company">Belgacom s.a.</span>
+              <span class="job-period">1999 – 2001</span>
+            </div>
+            <div class="job-desc">Intranet de gestion de pannes réseau, applications de gestion de stock et de matériel bureautique, portail intranet principal avec administration automatisée. Créateur principal du design du portail. Formulaires intranet (lignes ISDN, réservation de parkings).</div>
+            <div class="tags"><span class="tag">VB6</span><span class="tag">ASP</span><span class="tag">SQL Server</span><span class="tag">HTML/DHTML</span><span class="tag">VBScript</span><span class="tag">IIS</span></div>
+          </div>
+        </div>
+
+      </div><!-- /card expérience -->
+
+    </div><!-- /main col -->
+
+    <!-- SIDEBAR -->
+    <div>
+
+      <!-- COMPÉTENCES -->
+      <div class="card">
+        <div class="section-title">Compétences techniques</div>
+
+        <div class="skill-group">
+          <div class="skill-label">Langages</div>
+          <div class="skill-pills">
+            <span class="pill main">C# .NET</span>
+            <span class="pill main">VB.NET</span>
+            <span class="pill">VB6 / VBA</span>
+            <span class="pill">PHP</span>
+            <span class="pill">Java</span>
+            <span class="pill">Python</span>
+            <span class="pill">C / C++</span>
+            <span class="pill">JavaScript</span>
+            <span class="pill">XML / XSLT</span>
+          </div>
+        </div>
+
+        <div class="skill-group">
+          <div class="skill-label">Frameworks & UI</div>
+          <div class="skill-pills">
+            <span class="pill main">WPF / XAML</span>
+            <span class="pill">ASP.NET / Razor</span>
+            <span class="pill">Web API REST</span>
+            <span class="pill">WCF</span>
+            <span class="pill">Windows Forms</span>
+            <span class="pill">Silverlight</span>
+            <span class="pill">Bootstrap</span>
+            <span class="pill">jQuery</span>
+            <span class="pill">HTML5 / CSS3</span>
+            <span class="pill">Odoo 18</span>
+          </div>
+        </div>
+
+        <div class="skill-group">
+          <div class="skill-label">Bases de données</div>
+          <div class="skill-pills">
+            <span class="pill main">SQL Server</span>
+            <span class="pill main">Oracle</span>
+            <span class="pill">MySQL</span>
+            <span class="pill">PostgreSQL</span>
+            <span class="pill">SQLite</span>
+            <span class="pill">IBM DB2</span>
+            <span class="pill">Access</span>
+          </div>
+        </div>
+
+        <div class="skill-group">
+          <div class="skill-label">Outils & environnements</div>
+          <div class="skill-pills">
+            <span class="pill">Visual Studio 2022</span>
+            <span class="pill">VS Code</span>
+            <span class="pill">GitHub</span>
+            <span class="pill">IIS / Apache / Tomcat</span>
+            <span class="pill">SoapUI</span>
+            <span class="pill">Fiddler2</span>
+            <span class="pill">Araxis Merge</span>
+            <span class="pill">Photoshop</span>
+            <span class="pill">Illustrator</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- FORMATION -->
+      <div class="card">
+        <div class="section-title">Formation</div>
+
+        <div class="edu">
+          <div class="edu-degree">C.A.P. (Certificat d'Aptitudes Pédagogiques)</div>
+          <div class="edu-school">IEPSCF Verviers-Dison</div>
+          <div class="edu-year">2010 – 2011 · Distinction</div>
+        </div>
+        <div class="edu">
+          <div class="edu-degree">Graduat en Informatique de Gestion</div>
+          <div class="edu-school">IEPSCF Soumagne-Chênée</div>
+          <div class="edu-year">1998 – 2000 · Distinction</div>
+        </div>
+        <div class="edu">
+          <div class="edu-degree">Graduat en kinésithérapie <small style="font-weight:300;color:var(--muted)">(non terminé)</small></div>
+          <div class="edu-school">Haute école Province de Liège – Barbou</div>
+          <div class="edu-year">1995 – 1996</div>
+        </div>
+        <div class="edu">
+          <div class="edu-degree">CESS – Chimie Appliquée</div>
+          <div class="edu-school">Institut Sainte-Claire, Verviers</div>
+          <div class="edu-year">1992 – 1994</div>
+        </div>
+        <div class="edu">
+          <div class="edu-degree">CESI – Sciences Appliquées</div>
+          <div class="edu-school">Collège Saint François-Xavier, Verviers</div>
+          <div class="edu-year">1990 – 1992</div>
+        </div>
+
+        <div style="margin-top:18px;">
+          <div class="skill-label" style="margin-bottom:10px;">Formations complémentaires</div>
+          <ul class="formation-list">
+            <li>IBMi Access Client Solutions & IBM Rational Developer for i</li>
+            <li>Technifutur : Oracle Database – maîtriser les bases (3 j.)</li>
+            <li>Technifutur : aperçu général de la comptabilité (4 j.)</li>
+            <li>Technifutur : développement .NET – bases de la programmation</li>
+            <li>Formation Delphi – adaptation d'une application (1 sem.)</li>
+            <li>Formation Java 6 jours (Manex) – POO, JDBC, Hibernate, JPA</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- LANGUES -->
+      <div class="card">
+        <div class="section-title">Langues</div>
+        <div class="lang">
+          <div class="lang-header">
+            <span class="lang-name">Français</span>
+            <span class="lang-note">Langue maternelle</span>
+          </div>
+          <div class="bar"><div class="bar-fill" style="width:100%"></div></div>
+        </div>
+        <div class="lang">
+          <div class="lang-header">
+            <span class="lang-name">Anglais</span>
+            <span class="lang-note">Lecture bonne · conversation moyenne</span>
+          </div>
+          <div class="bar"><div class="bar-fill" style="width:65%"></div></div>
+        </div>
+        <div class="lang">
+          <div class="lang-header">
+            <span class="lang-name">Néerlandais</span>
+            <span class="lang-note">Compréhension et conversation limitées</span>
+          </div>
+          <div class="bar"><div class="bar-fill" style="width:20%"></div></div>
+        </div>
+      </div>
+
+      <!-- LOISIRS -->
+      <div class="card">
+        <div class="section-title">Loisirs</div>
+        <div class="hobbies">
+          <span class="hobby">🥋 Karaté 2ᵉ Dan (depuis 1992)</span>
+          <span class="hobby">🎸 Guitare & cours particuliers</span>
+          <span class="hobby">📚 Lecture</span>
+          <span class="hobby">🚵 VTT</span>
+          <span class="hobby">🏃 Course à pied</span>
+          <span class="hobby">🌲 Balades en forêt</span>
+          <span class="hobby">🎬 Cinéma</span>
+          <span class="hobby">💻 Informatique</span>
+        </div>
+      </div>
+
+    </div><!-- /sidebar -->
+
+  </div><!-- /columns -->
+
+  <!-- FOOTER BUTTONS -->
+  <div class="cv-footer">
+    <a href="mailto:fabian.terf@gmail.com" class="btn">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      Me contacter par email
+    </a>
+    <a href="javascript:window.print()" class="btn outline">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+      Imprimer / PDF
+    </a>
+  </div>
+
+</div><!-- /page -->
+
+<script>
+  window.addEventListener('load', () => {
+    document.querySelectorAll('.bar-fill').forEach(el => {
+      const w = el.style.width;
+      el.style.width = '0';
+      setTimeout(() => { el.style.width = w; }, 300);
+    });
+  });
+</script>
 </body>
 </html>
